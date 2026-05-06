@@ -1,0 +1,73 @@
+{
+  "repo": "onyx-data-lineage-pipe",
+  "language": "C++",
+  "category": "Data engineering",
+  "goal": "Build a C++ toolkit that studies lineage behavior through negative fixtures, with human-readable error snapshots and local-only command execution.",
+  "review_model": {
+    "terms": [
+      "schema drift",
+      "lineage depth",
+      "partition skew",
+      "quality gap"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "schema drift",
+      "signal": 69,
+      "slack": 31,
+      "drag": 12,
+      "confidence": 64,
+      "score": 197,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "lineage depth",
+      "signal": 77,
+      "slack": 44,
+      "drag": 22,
+      "confidence": 87,
+      "score": 219,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "partition skew",
+      "signal": 55,
+      "slack": 39,
+      "drag": 31,
+      "confidence": 93,
+      "score": 149,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "quality gap",
+      "signal": 75,
+      "slack": 34,
+      "drag": 17,
+      "confidence": 69,
+      "score": 202,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "schema drift",
+      "signal": 86,
+      "slack": 51,
+      "drag": 26,
+      "confidence": 63,
+      "score": 208,
+      "lane": "ship"
+    }
+  ]
+}

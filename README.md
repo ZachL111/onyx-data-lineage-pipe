@@ -1,68 +1,40 @@
 # onyx-data-lineage-pipe
 
-`onyx-data-lineage-pipe` packages a practical data engineering exercise in C++. The emphasis is on deterministic behavior, a small public API, and examples that explain the tradeoffs.
+`onyx-data-lineage-pipe` keeps a focused C++ implementation around data engineering. The project goal is to build a C++ toolkit that studies lineage behavior through negative fixtures, with human-readable error snapshots and local-only command execution.
 
-## How I Read Onyx Data Lineage Pipe
+## Why It Exists
 
-The useful thing to inspect here is how the same score rule is represented in code, metadata, and examples. If those three pieces disagree, the audit script should make the drift visible.
+The project exists to keep a narrow engineering decision visible and testable. For this repo, that decision is how schema drift and partition skew should influence a review result.
 
-## Problem Shape
+## Onyx Data Lineage Pipe Review Notes
 
-This is not a wrapper around a service. It is a self-contained project that shows how the model behaves when demand, capacity, latency, risk, and weight move in different directions.
+`stress` and `edge` are the cases worth reading first. They show the optimistic and cautious ends of the fixture.
 
-## Repository Map
+## Features
 
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
+- `fixtures/domain_review.csv` adds cases for schema drift and lineage depth.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/onyx-data-lineage-walkthrough.md` walks through the case spread.
+- The C++ code includes a review path for `lineage depth` and `partition skew`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Main Behaviors
+## Architecture Notes
 
-- Includes extended examples for pipeline state, including `surge` and `degraded`.
-- Documents quality gates tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
-- Adds a repository audit script that checks structure before running the language verifier.
+The implementation keeps the scoring rule plain: reward signal and confidence, preserve slack, penalize drag, then classify the result into a review lane.
 
-## Internal Model
+The added C++ path is deliberately direct, with fixtures doing most of the explaining.
 
-The core is a scoring model over demand, capacity, latency, risk, and weight. That keeps schema drift, lineage checks, and pipeline state in one explicit decision path. The threshold is 177, with risk penalty 4, latency penalty 2, and weight bonus 5. The C++ project uses a small library boundary and a compiled assertion harness.
-
-## Run It Locally
-
-Use a normal shell with C++ available on `PATH`. The verifier is written as a PowerShell script because the portfolio was assembled on Windows.
-
-## Scenario Walkthrough
-
-The examples are meant to be readable before they are exhaustive. They cover enough variation to show how latency and risk can pull a decision below the threshold.
-
-## How To Run It
+## Usage
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Tests
 
-## Validation
+The check exercises the source code and the review fixture. `stress` is the high score at 219; `edge` is the low score at 149.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+## Limitations And Roadmap
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Follow-Up Work
-
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add a comparison mode that shows how decisions change when one signal is adjusted.
-- Add one more data engineering fixture that focuses on a malformed or borderline input.
-
-## Known Edges
-
-The fixture set is deliberately small. That keeps the review surface clear, but it also means the model should not be treated as a complete domain simulator.
+The repository is intentionally scoped to local checks. I would expand it by adding adversarial fixtures before adding features.
