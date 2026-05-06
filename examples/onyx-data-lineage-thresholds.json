@@ -1,0 +1,17 @@
+{
+  "repo": "onyx-data-lineage-pipe",
+  "thresholds": {
+    "signal": 2,
+    "slack": 1,
+    "confidence": 1,
+    "drag": 5,
+    "ship": 177,
+    "watch": 95
+  },
+  "terms": [
+    "schema drift",
+    "lineage depth",
+    "partition skew",
+    "quality gap"
+  ]
+}
